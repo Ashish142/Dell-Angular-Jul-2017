@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Math Calculator</title>
+	<script src="angular.js"></script>
+	<script>
+		function MathCalculator(){
+			this.number1 = 0;
+			this.number2 = 0;
+			this.result = 0;
+		}
+		MathCalculator.prototype.add = function() {
+			this.result = this.number1 + this.number2;
+		};
+		MathCalculator.prototype.subtract = function() {
+			this.result = this.number1 - this.number2;
+		};
+		MathCalculator.prototype.multiply = function() {
+			this.result = this.number1 * this.number2;
+		};
+		MathCalculator.prototype.divide = function() {
+			this.result = this.number1 / this.number2;
+		};
+
+		var myApp = angular.module('myApp', []);
+		myApp.controller('mathCalculatorController', function($scope){
+			$scope.calculator = new MathCalculator();
+		});
+
+		
+	</script>
+</head>
+<body ng-app="myApp">
+	<hr>
+	<div ng-controller="mathCalculatorController">
+		<h1>Math Calculator-1</h1>
+		<hr>
+		<div class="content">
+			<input type="number" ng-model="calculator.number1">
+			<input type="number" ng-model="calculator.number2">
+			<input type="button" value="Add" ng-click="calculator.add()">
+			<input type="button" value="Subtract" ng-click="calculator.subtract()">
+			<input type="button" value="Multiply" ng-click="calculator.multiply()">
+			<input type="button" value="Divide" ng-click="calculator.divide()">
+			<div ng-bind="calculator.result">[Result]</div>
+		</div>
+	</div>
+	<div ng-controller="mathCalculatorController">
+		<h1>Math Calculator-2</h1>
+		<hr>
+		<input type="number" ng-model="calculator.number1">
+		<select ng-model="operation">
+			<option value="add">Add</option>
+			<option value="subtract">Subtract</option>
+			<option value="multiply">Multiply</option>
+			<option value="divide">Divide</option>
+		</select>
+		<input type="number" ng-model="calculator.number2" >
+		<input type="button" value="Calculate" ng-click="calculator[operation]()">
+		<div ng-bind="calculator.result">[Result]</div>
+	</div>
+</body>
+</html>
