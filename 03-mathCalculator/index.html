@@ -26,6 +26,27 @@
 		var myApp = angular.module('myApp', []);
 		myApp.controller('mathCalculatorController', function($scope){
 			$scope.calculator = new MathCalculator();
+		});
+
+		myApp.controller('mathCalculatorController2', function($scope){
+			$scope.calculator = new MathCalculator();
+			$scope.operation = '';
+			$scope.calculate = function(){
+				switch($scope.operation){
+					case 'add':
+						$scope.calculator.add();
+						break;
+					case 'subtract':
+						$scope.calculator.subtract();
+						break;
+					case 'multiply':
+						$scope.calculator.multiply();
+						break;
+					case 'divide':
+						$scope.calculator.divide();
+						break;
+				}
+			}
 		})
 	</script>
 </head>
@@ -44,19 +65,19 @@
 			<div ng-bind="calculator.result">[Result]</div>
 		</div>
 	</div>
-	<div>
+	<div ng-controller="mathCalculatorController2">
 		<h1>Math Calculator-2</h1>
 		<hr>
-		<input type="number" >
-		<select >
+		<input type="number" ng-model="calculator.number1">
+		<select ng-model="operation">
 			<option value="add">Add</option>
 			<option value="subtract">Subtract</option>
 			<option value="multiply">Multiply</option>
 			<option value="divide">Divide</option>
 		</select>
-		<input type="number" >
-		<input type="button" value="Calculate">
-		<div>[Result]</div>
+		<input type="number" ng-model="calculator.number2" >
+		<input type="button" value="Calculate" ng-click="calculate()">
+		<div ng-bind="calculator.result">[Result]</div>
 	</div>
 </body>
 </html>
