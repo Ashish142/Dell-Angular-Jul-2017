@@ -36,6 +36,7 @@
 		}
 
 	</style>
+	<script src="angular.js"></script>
 	<script type="text/stories">
 		1. Add a bug
 		2. List the bugs
@@ -50,18 +51,29 @@
 		11. Persist the bugs in the server
 		12. Make the bugs accessible using unique URLs
 	</script>
+	<script>
+		var bugTrackerApp = angular.module('bugTrackerApp', []);
+
+		bugTrackerApp.controller('bugsController', function($scope){
+			$scope.bugs = [];
+
+			$scope.addNew = function(bugName){
+				$scope.bugs.push(bugName)
+			}
+		});
+	</script>
 </head>
-<body>
+<body ng-app="bugTrackerApp">
 	<h1>Bug Tracker</h1>
 	<hr>
-	<section class="content">
+	<section class="content" ng-controller="bugsController">
 		<section class="stats">
 			<span class="closed">2</span>
 			<span> / </span>
-			<span>5</span>
+			<span>{{bugs.length}}</span>
 		</section>
 		<section class="search">
-			<label for="">Order By :</label>
+			<label for="">Search :</label>
 			<input type="text" name="" id="">
 			<label for="">Is Closed ? :</label>
 			<input type="checkbox" name="" id="">
@@ -75,8 +87,8 @@
 		</section>
 		<section class="edit">
 			<label for="">Bug Name :</label>
-			<input type="text" name="" id="">
-			<input type="button" value="Add New">
+			<input type="text" ng-model="newBugName">
+			<input type="button" value="Add New" ng-click="addNew(newBugName)">
 		</section>
 		<section class="list">
 			<ol>
