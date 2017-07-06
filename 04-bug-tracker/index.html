@@ -40,11 +40,11 @@
 	<script type="text/stories">
 		(done) 1. Add a bug
 		(done) 2. List the bugs
-		3. Toggle the 'closed' status of a bug
-		4. Remove closed bugs
-		5. Display statistics ( # of closed bugs / total # of bugs)
-		6. Search for the bugs
-		7. Sort the bugs
+		(done) 3. Toggle the 'closed' status of a bug
+		(done) 4. Remove closed bugs
+		(done) 5. Display statistics ( # of closed bugs / total # of bugs)
+		(done) 6. Search for the bugs
+		(done) 7. Sort the bugs
 		8. Improve bug display
 		9. Persist the bugs in the localStorage
 		10. Display 'createdAt'
@@ -54,20 +54,40 @@
 	<script>
 		var bugTrackerApp = angular.module('bugTrackerApp', []);
 
-		bugTrackerApp.controller('bugsController', function($scope){
+		bugTrackerApp.value('defaultBugName', '[Default Bug]');
 
-			$scope.bugs = [];
+		bugTrackerApp.factory("bugOperations" ,  function (defaultBugName){
+			var currentBugId = 0;
+			return {
+				createNew : function(bugName){
+					return {
+						id : ++currentBugId,
+						name : bugName || defaultBugName,
+						isClosed : false
+					};
+				},
+				toggle : function(bug){
+					bug.isClosed = !bug.isClosed;
+				}
+			};
+		});
+
+		bugTrackerApp.controller('bugsController', function($scope, bugOperations){
+
+			$scope.bugs = [
+				bugOperations.createNew('Server communication failure'),
+				bugOperations.createNew('Data validation error'),
+				bugOperations.createNew('User actions not recognized'),
+				bugOperations.createNew('Application is not responsive')
+			];
 
 			$scope.addNew = function(bugName){
-				var  newBug = {
-					name : bugName,
-					isClosed : false
-				};
+				var newBug = bugOperations.createNew(bugName);
 				$scope.bugs.push(newBug);
 			};
 
 			$scope.toggle = function(bug){
-				bug.isClosed = !bug.isClosed;
+				bugOperations.toggle(bug);
 			};
 
 			$scope.removeClosed = function(){
@@ -98,16 +118,21 @@
 		</section>
 		<section class="search">
 			<label for="">Search :</label>
-			<input type="text" name="" id="">
+			<input type="text" ng-model="searchBug.name">
 			<label for="">Is Closed ? :</label>
-			<input type="checkbox" name="" id="">
-			<input type="button" value="Show All">
+			<input type="checkbox" ng-model="searchBug.isClosed" ng-init="searchBug.isClosed=''">
+			<input type="button" value="Show All" ng-click="searchBug.isClosed = ''" ng-show="searchBug.isClosed !== ''">
 		</section>
 		<section class="sort">
 			<label for="">Order By :</label>
-			<input type="text" name="" id="">
+			<!-- <input type="text" ng-model="sortBugBy"> -->
+			<select ng-model="sortBugBy" ng-init="sortBugBy='id'">
+				<option value="id">Default</option>
+				<option value="name">Name</option>
+				<option value="isClosed">Status</option>
+			</select>
 			<label for="">Descending ? :</label>
-			<input type="checkbox" name="" id="">
+			<input type="checkbox" ng-model="sortDescending">
 		</section>
 		<section class="edit">
 			<label for="">Bug Name :</label>
@@ -116,8 +141,8 @@
 		</section>
 		<section class="list">
 			<ol>
-				<li ng-repeat="bug in bugs">
-					<span class="bugname" ng-click="toggle(bug)" ng-class="{closed : bug.isClosed}">{{bug}}</span>
+				<li ng-repeat="bug in ( bugs | filter:searchBug | orderBy:sortBugBy:sortDescending)">
+					<span class="bugname" ng-click="toggle(bug)" ng-class="{closed : bug.isClosed}">{{bug.name}}</span>
 					<div class="datetime">[created at]</div>
 				</li>
 			</ol>
