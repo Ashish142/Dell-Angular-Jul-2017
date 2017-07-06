@@ -38,8 +38,8 @@
 	</style>
 	<script src="angular.js"></script>
 	<script type="text/stories">
-		1. Add a bug
-		2. List the bugs
+		(done) 1. Add a bug
+		(done) 2. List the bugs
 		3. Toggle the 'closed' status of a bug
 		4. Remove closed bugs
 		5. Display statistics ( # of closed bugs / total # of bugs)
@@ -92,12 +92,8 @@
 		</section>
 		<section class="list">
 			<ol>
-				<li>
-					<span class="bugname">[This is bug - 1]</span>
-					<div class="datetime">[created at]</div>
-				</li>
-				<li>
-					<span class="bugname closed">[This is bug - 2]</span>
+				<li ng-repeat="bug in bugs track by $index">
+					<span class="bugname">{{bug}}</span>
 					<div class="datetime">[created at]</div>
 				</li>
 			</ol>
