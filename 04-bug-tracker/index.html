@@ -55,10 +55,34 @@
 		var bugTrackerApp = angular.module('bugTrackerApp', []);
 
 		bugTrackerApp.controller('bugsController', function($scope){
+
 			$scope.bugs = [];
 
 			$scope.addNew = function(bugName){
-				$scope.bugs.push(bugName)
+				var  newBug = {
+					name : bugName,
+					isClosed : false
+				};
+				$scope.bugs.push(newBug);
+			};
+
+			$scope.toggle = function(bug){
+				bug.isClosed = !bug.isClosed;
+			};
+
+			$scope.removeClosed = function(){
+				for(var index = $scope.bugs.length-1; index >= 0; index--){
+					if ($scope.bugs[index].isClosed)
+						$scope.bugs.splice(index,1);
+				}
+			};
+
+			$scope.getClosedCount = function(){
+				var closedCount = 0;
+				for(var index = 0; index < $scope.bugs.length; index++)
+					if ($scope.bugs[index].isClosed)
+						++closedCount;
+				return closedCount;
 			}
 		});
 	</script>
@@ -68,7 +92,7 @@
 	<hr>
 	<section class="content" ng-controller="bugsController">
 		<section class="stats">
-			<span class="closed">2</span>
+			<span class="closed">{{getClosedCount()}}</span>
 			<span> / </span>
 			<span>{{bugs.length}}</span>
 		</section>
@@ -92,12 +116,12 @@
 		</section>
 		<section class="list">
 			<ol>
-				<li ng-repeat="bug in bugs track by $index">
-					<span class="bugname">{{bug}}</span>
+				<li ng-repeat="bug in bugs">
+					<span class="bugname" ng-click="toggle(bug)" ng-class="{closed : bug.isClosed}">{{bug}}</span>
 					<div class="datetime">[created at]</div>
 				</li>
 			</ol>
-			<input type="button" value="Remove Closed">
+			<input type="button" value="Remove Closed" ng-click="removeClosed()">
 		</section>
 	</section>
 </body>
