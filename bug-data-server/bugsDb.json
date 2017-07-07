@@ -1,22 +1,16 @@
 {
   "bugs": [
     {
-      "id": 1,
-      "name": "Server communication failure",
+      "id": 4,
+      "name": "Bug - 1",
       "isClosed": false,
-      "createdAt": "2017-06-20T06:41:12.404Z"
+      "createdAt": "2017-07-07T10:45:00.550Z"
     },
     {
-      "id": 2,
-      "name": "User actions not recognized",
-      "isClosed": true,
-      "createdAt": "2017-06-20T06:41:32.282Z"
-    },
-    {
-      "id": 3,
-      "name": "Application not responsive",
-      "isClosed": true,
-      "createdAt": "2017-06-20T06:57:18.957Z"
+      "id": 5,
+      "name": "Bug - 2",
+      "isClosed": false,
+      "createdAt": "2017-07-07T10:50:13.305Z"
     }
   ],
   "employees": [
