@@ -46,7 +46,7 @@
 		(done) 6. Search for the bugs
 		(done) 7. Sort the bugs
 		(done) 8. Improve bug display
-		9. Persist the bugs in the localStorage
+		(done) 9. Persist the bugs in the localStorage
 			window.localStorage
 			====================
 			* key/value store
@@ -149,10 +149,14 @@
 				}
 			};
 
-			$scope.getClosedCount = function(){
+			
+		});
+
+		bugTrackerApp.filter('closedCount', function(){
+			return function(bugs){
 				var closedCount = 0;
-				for(var index = 0; index < $scope.bugs.length; index++)
-					if ($scope.bugs[index].isClosed)
+				for(var index = 0; index < bugs.length; index++)
+					if (bugs[index].isClosed)
 						++closedCount;
 				return closedCount;
 			}
@@ -173,7 +177,7 @@
 	<hr>
 	<section class="content" ng-controller="bugsController">
 		<section class="stats">
-			<span class="closed">{{getClosedCount()}}</span>
+			<span class="closed">{{bugs | closedCount}}</span>
 			<span> / </span>
 			<span>{{bugs.length}}</span>
 		</section>
