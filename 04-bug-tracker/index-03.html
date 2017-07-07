@@ -72,13 +72,13 @@
 		bugTrackerApp.value('defaultBugName', '[Default Bug]');
 
 		bugTrackerApp.factory("bugOperations" ,  function (defaultBugName){
-			var currentBugId = 0;
 			return {
-				createNew : function(bugName){
+				createNew : function(id, bugName){
 					return {
-						id : ++currentBugId,
+						id : id,
 						name : bugName || defaultBugName,
-						isClosed : false
+						isClosed : false,
+						createdAt : new Date()
 					};
 				},
 				toggle : function(bug){
@@ -89,27 +89,36 @@
 
 		bugTrackerApp.controller('bugsController', function($scope, bugOperations){
 
-			$scope.bugs = [
-				bugOperations.createNew('Server communication failure'),
-				bugOperations.createNew('Data validation error'),
-				bugOperations.createNew('User actions not recognized'),
-				bugOperations.createNew('Application is not responsive')
-			];
+			$scope.bugs = [];
+			var currentBugId = 0;
+			var storage = window.localStorage;
+
+			for(var index = 0; index < storage.length; index++){
+				var key = storage.key(index),
+					data = storage.getItem(key),
+					bug = angular.fromJson(data);
+				$scope.bugs.push(bug);
+				currentBugId = currentBugId > bug.id ? currentBugId : bug.id;
+			}
 
 			$scope.addNew = function(bugName){
-				var newBug = bugOperations.createNew(bugName);
+				var newBug = bugOperations.createNew(++currentBugId, bugName);
+				storage.setItem(newBug.id.toString(), angular.toJson(newBug));
 				$scope.bugs.push(newBug);
 				$scope.newBugName = '';
 			};
 
 			$scope.toggle = function(bug){
 				bugOperations.toggle(bug);
+				storage.setItem(bug.id.toString(), angular.toJson(bug));
 			};
 
 			$scope.removeClosed = function(){
 				for(var index = $scope.bugs.length-1; index >= 0; index--){
-					if ($scope.bugs[index].isClosed)
+					if ($scope.bugs[index].isClosed){
+						storage.removeItem($scope.bugs[index].id.toString());
 						$scope.bugs.splice(index,1);
+					}
 				}
 			};
 
@@ -170,7 +179,7 @@
 					<span class="bugname" ng-click="toggle(bug)" ng-class="{closed : bug.isClosed}">
 						{{bug.name | trimText:30}}
 					</span>
-					<div class="datetime">[created at]</div>
+					<div class="datetime">{{bug.createdAt}}</div>
 				</li>
 			</ol>
 			<input type="button" value="Remove Closed" ng-click="removeClosed()">
