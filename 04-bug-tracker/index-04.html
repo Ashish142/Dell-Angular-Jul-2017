@@ -38,7 +38,8 @@
 	</style>
 	<script src="angular.js"></script>
 	<script src="moment.js"></script>
-
+	<script src="utils.js"></script>
+	
 	<script type="text/stories">
 		(done) 1. Add a bug
 		(done) 2. List the bugs
@@ -69,7 +70,9 @@
 		12. Make the bugs accessible using unique URLs
 	</script>
 	<script>
-		var bugTrackerApp = angular.module('bugTrackerApp', []);
+		
+
+		var bugTrackerApp = angular.module('bugTrackerApp', ['utils']);
 
 		bugTrackerApp.value('defaultBugName', '[Default Bug]');
 
@@ -164,20 +167,7 @@
 			}
 		});
 
-		bugTrackerApp.value('defaultTrimLength', 40);
-
-		bugTrackerApp.filter('trimText', function(defaultTrimLength){
-			return function(data, trimLength){
-				trimLength = trimLength || defaultTrimLength;
-				return data.length < trimLength ? data : data.substr(0,trimLength) + '...';
-			};
-		});
-
-		bugTrackerApp.filter('elapsed', function(){
-			return function(data){
-				return moment(data).fromNow();
-			};
-		});
+		
 	</script>
 </head>
 <body ng-app="bugTrackerApp">
