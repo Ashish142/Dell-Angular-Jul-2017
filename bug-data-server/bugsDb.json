@@ -3,7 +3,7 @@
     {
       "id": 4,
       "name": "Bug - 1",
-      "isClosed": false,
+      "isClosed": true,
       "createdAt": "2017-07-07T10:45:00.550Z"
     },
     {
@@ -11,6 +11,12 @@
       "name": "Bug - 2",
       "isClosed": false,
       "createdAt": "2017-07-07T10:50:13.305Z"
+    },
+    {
+      "id": 6,
+      "name": "Router not working",
+      "isClosed": false,
+      "createdAt": "2017-07-07T11:31:42.594Z"
     }
   ],
   "employees": [
